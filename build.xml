@@ -1,0 +1,17 @@
+<project name="PdfViewer" default="dist" basedir=".">
+   <description>PdfViewer</description>
+   <!-- Setting global properties for this build -->
+   <property name="src" location="src" />
+   <property name="bin" location="bin" />
+ 
+   <target name="dist">
+      <jar destfile="PdfViewer.jar" basedir="bin/">
+         <!-- Use ** to include the directory recursively -->
+         <include name="com/**" />
+         <include name="net/**" />
+         <include name="de/**" />
+         <include name="androswing/**" />
+      </jar>
+   </target>
+</project>
+
