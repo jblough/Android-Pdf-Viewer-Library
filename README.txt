@@ -31,7 +31,7 @@ Quickstart incorporating a PDF viewing activity into your project:
      public int getPdfPageNumberEditField() { return R.id.pagenum_edit; }
 
 6) Invoke your PdfViewActivity derived with the following code:
-     Intent intent = new Intent(this, TipPdfViewerActivity.class);
+     Intent intent = new Intent(this, YourPdfViewerActivity.class);
      intent.putExtra(PdfViewerActivity.EXTRA_PDFFILENAME, "PATH TO PDF GOES HERE");
      startActivity(intent);
     
