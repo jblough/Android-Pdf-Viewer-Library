@@ -1,19 +1,16 @@
 package net.sf.andpdf.pdfviewer;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
-import java.text.NumberFormat;
 
 import net.sf.andpdf.nio.ByteBuffer;
 import net.sf.andpdf.pdfviewer.gui.FullScrollView;
 import net.sf.andpdf.refs.HardReference;
-import net.sf.andpdf.refs.WeakReference;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -22,11 +19,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.Bitmap.Config;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -36,12 +30,9 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.ViewStub;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -171,14 +162,14 @@ public abstract class PdfViewerActivity extends Activity {
         restoreInstance();
         if (mOldGraphView != null) {
 	        mGraphView = new GraphView(this);
-	        mGraphView.fileMillis = mOldGraphView.fileMillis;
+	        //mGraphView.fileMillis = mOldGraphView.fileMillis;
 	        mGraphView.mBi = mOldGraphView.mBi;
 	        //mGraphView.mLine1 = mOldGraphView.mLine1;
 	        //mGraphView.mLine2 = mOldGraphView.mLine2;
 	        //mGraphView.mLine3 = mOldGraphView.mLine3;
 	        //mGraphView.mText = mOldGraphView.mText;
-	        mGraphView.pageParseMillis= mOldGraphView.pageParseMillis;
-	        mGraphView.pageRenderMillis= mOldGraphView.pageRenderMillis;
+	        //mGraphView.pageParseMillis= mOldGraphView.pageParseMillis;
+	        //mGraphView.pageRenderMillis= mOldGraphView.pageRenderMillis;
 	        mOldGraphView = null;
 	        mGraphView.mImageView.setImageBitmap(mGraphView.mBi);
 	        mGraphView.updateTexts();
@@ -359,7 +350,7 @@ public abstract class PdfViewerActivity extends Activity {
     			mZoom *= 1.5;
     			if (mZoom > 4)
     				mZoom = 4;
-    			progress = ProgressDialog.show(PdfViewerActivity.this, "Rendering", "Rendering PDF Page");
+    			//progress = ProgressDialog.show(PdfViewerActivity.this, "Rendering", "Rendering PDF Page");
     			startRenderThread(mPage, mZoom);
     		}
     	}
@@ -371,7 +362,7 @@ public abstract class PdfViewerActivity extends Activity {
     			mZoom /= 1.5;
     			if (mZoom < 0.25)
     				mZoom = 0.25f;
-    			progress = ProgressDialog.show(PdfViewerActivity.this, "Rendering", "Rendering PDF Page");
+    			//progress = ProgressDialog.show(PdfViewerActivity.this, "Rendering", "Rendering PDF Page");
     			startRenderThread(mPage, mZoom);
     		}
     	}
@@ -452,9 +443,9 @@ public abstract class PdfViewerActivity extends Activity {
     
 	private class GraphView extends FullScrollView {
     	//private String mText;
-    	private long fileMillis;
-    	private long pageParseMillis;
-    	private long pageRenderMillis;
+    	//private long fileMillis;
+    	//private long pageParseMillis;
+    	//private long pageRenderMillis;
     	private Bitmap mBi;
     	//private String mLine1;
     	//private String mLine2;
@@ -730,36 +721,39 @@ public abstract class PdfViewerActivity extends Activity {
     		}
         }
 
-		private String format(double value, int num) {
+		/*private String format(double value, int num) {
 			NumberFormat nf = NumberFormat.getNumberInstance();
 			nf.setGroupingUsed(false);
 			nf.setMaximumFractionDigits(num);
 			String result = nf.format(value);
 			return result;
-		}
+		}*/
     }
 
 	
 	
     private void showPage(int page, float zoom) throws Exception {
-        long startTime = System.currentTimeMillis();
-        long middleTime = startTime;
+        //long startTime = System.currentTimeMillis();
+        //long middleTime = startTime;
     	try {
 	        // free memory from previous page
 	        mGraphView.setPageBitmap(null);
 	        mGraphView.updateImage();
 	        
-	        mPdfPage = mPdfFile.getPage(page, true);
-	        int num = mPdfPage.getPageNumber();
-	        int maxNum = mPdfFile.getNumPages();
-	        float wi = mPdfPage.getWidth();
-	        float hei = mPdfPage.getHeight();
-	        String pageInfo= new File(pdffilename).getName() + " - " + num +"/"+maxNum+ ": " + wi + "x" + hei;
-	        mGraphView.showText(pageInfo);
-	        Log.i(TAG, pageInfo);
+	        // Only load the page if it's a different page (i.e. not just changing the zoom level) 
+	        if (mPdfPage == null || mPdfPage.getPageNumber() != page) {
+	        	mPdfPage = mPdfFile.getPage(page, true);
+	        }
+	        //int num = mPdfPage.getPageNumber();
+	        //int maxNum = mPdfFile.getNumPages();
+	        float width = mPdfPage.getWidth();
+	        float height = mPdfPage.getHeight();
+	        //String pageInfo= new File(pdffilename).getName() + " - " + num +"/"+maxNum+ ": " + width + "x" + height;
+	        //mGraphView.showText(pageInfo);
+	        //Log.i(TAG, pageInfo);
 	        RectF clip = null;
-	        middleTime = System.currentTimeMillis();
-	        Bitmap bi = mPdfPage.getImage((int)(wi*zoom), (int)(hei*zoom), clip, true, true);
+	        //middleTime = System.currentTimeMillis();
+	        Bitmap bi = mPdfPage.getImage((int)(width*zoom), (int)(height*zoom), clip, true, true);
 	        mGraphView.setPageBitmap(bi);
 	        mGraphView.updateImage();
 	        
@@ -769,13 +763,13 @@ public abstract class PdfViewerActivity extends Activity {
 			Log.e(TAG, e.getMessage(), e);
 			mGraphView.showText("Exception: "+e.getMessage());
 		}
-        long stopTime = System.currentTimeMillis();
-        mGraphView.pageParseMillis = middleTime-startTime;
-        mGraphView.pageRenderMillis = stopTime-middleTime;
+        //long stopTime = System.currentTimeMillis();
+        //mGraphView.pageParseMillis = middleTime-startTime;
+        //mGraphView.pageRenderMillis = stopTime-middleTime;
     }
     
     private void parsePDF(String filename, String password) throws PDFAuthenticationFailureException {
-        long startTime = System.currentTimeMillis();
+        //long startTime = System.currentTimeMillis();
     	try {
         	File f = new File(filename);
         	long len = f.length();
@@ -793,8 +787,8 @@ public abstract class PdfViewerActivity extends Activity {
 			e.printStackTrace();
 			mGraphView.showText("Exception: "+e.getMessage());
 		}
-        long stopTime = System.currentTimeMillis();
-        mGraphView.fileMillis = stopTime-startTime;
+        //long stopTime = System.currentTimeMillis();
+        //mGraphView.fileMillis = stopTime-startTime;
 	}
 
     
@@ -828,7 +822,7 @@ public abstract class PdfViewerActivity extends Activity {
     }
     
      
-    private byte[] readBytes(File srcFile) throws IOException {
+    /*private byte[] readBytes(File srcFile) throws IOException {
     	long fileLength = srcFile.length();
     	int len = (int)fileLength;
     	byte[] result = new byte[len];
@@ -840,7 +834,7 @@ public abstract class PdfViewerActivity extends Activity {
     		cnt = fis.read(result, pos, len-pos);
     	}
 		return result;
-	}
+	}*/
 
 	private String storeUriContentToFile(Uri uri) {
     	String result = null;
