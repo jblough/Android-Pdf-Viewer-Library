@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.RectF;
+import android.graphics.Bitmap.Config;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -59,6 +60,10 @@ public abstract class PdfViewerActivity extends Activity {
 	private static final int STARTPAGE = 1;
 	private static final float STARTZOOM = 1.0f;
 	
+	private static final float MIN_ZOOM = 0.25f;
+	private static final float MAX_ZOOM = 3.0f;
+	private static final float ZOOM_INCREMENT = 1.5f;
+	
 	private static final String TAG = "PDFVIEWER";
 	
     public static final String EXTRA_PDFFILENAME = "net.sf.andpdf.extra.PDFFILENAME";
@@ -72,13 +77,13 @@ public abstract class PdfViewerActivity extends Activity {
 	public static final boolean DEFAULTUSEFONTSUBSTITUTION = false;
 	public static final boolean DEFAULTKEEPCACHES = false;
     
-	private final static int MEN_NEXT_PAGE = 1;
-	private final static int MEN_PREV_PAGE = 2;
-	private final static int MEN_GOTO_PAGE = 3;
-	private final static int MEN_ZOOM_IN   = 4;
-	private final static int MEN_ZOOM_OUT  = 5;
-	private final static int MEN_BACK      = 6;
-	private final static int MEN_CLEANUP   = 7;
+	private final static int MENU_NEXT_PAGE = 1;
+	private final static int MENU_PREV_PAGE = 2;
+	private final static int MENU_GOTO_PAGE = 3;
+	private final static int MENU_ZOOM_IN   = 4;
+	private final static int MENU_ZOOM_OUT  = 5;
+	private final static int MENU_BACK      = 6;
+	private final static int MENU_CLEANUP   = 7;
 	
 	private final static int DIALOG_PAGENUM = 1;
 	
@@ -293,13 +298,13 @@ public abstract class PdfViewerActivity extends Activity {
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(Menu.NONE, MEN_PREV_PAGE, Menu.NONE, "Previous Page").setIcon(getPreviousPageImageResource());
-        menu.add(Menu.NONE, MEN_NEXT_PAGE, Menu.NONE, "Next Page").setIcon(getNextPageImageResource());
-        menu.add(Menu.NONE, MEN_GOTO_PAGE, Menu.NONE, "Goto Page");
-        menu.add(Menu.NONE, MEN_ZOOM_OUT, Menu.NONE, "Zoom Out").setIcon(getZoomOutImageResource());
-        menu.add(Menu.NONE, MEN_ZOOM_IN, Menu.NONE, "Zoom In").setIcon(getZoomInImageResource());
+        menu.add(Menu.NONE, MENU_PREV_PAGE, Menu.NONE, "Previous Page").setIcon(getPreviousPageImageResource());
+        menu.add(Menu.NONE, MENU_NEXT_PAGE, Menu.NONE, "Next Page").setIcon(getNextPageImageResource());
+        menu.add(Menu.NONE, MENU_GOTO_PAGE, Menu.NONE, "Goto Page");
+        menu.add(Menu.NONE, MENU_ZOOM_OUT, Menu.NONE, "Zoom Out").setIcon(getZoomOutImageResource());
+        menu.add(Menu.NONE, MENU_ZOOM_IN, Menu.NONE, "Zoom In").setIcon(getZoomInImageResource());
         if (HardReference.sKeepCaches)
-            menu.add(Menu.NONE, MEN_CLEANUP, Menu.NONE, "Clear Caches");
+            menu.add(Menu.NONE, MENU_CLEANUP, Menu.NONE, "Clear Caches");
         	
         return true;
     }
@@ -311,31 +316,31 @@ public abstract class PdfViewerActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
     	switch (item.getItemId()) {
-    	case MEN_NEXT_PAGE: {
+    	case MENU_NEXT_PAGE: {
     		nextPage();
     		break;
     	}
-    	case MEN_PREV_PAGE: {
+    	case MENU_PREV_PAGE: {
     		prevPage();
     		break;
     	}
-    	case MEN_GOTO_PAGE: {
+    	case MENU_GOTO_PAGE: {
     		gotoPage();
     		break;
     	}
-    	case MEN_ZOOM_IN: {
+    	case MENU_ZOOM_IN: {
     		zoomIn();
     		break;
     	}
-    	case MEN_ZOOM_OUT: {
+    	case MENU_ZOOM_OUT: {
     		zoomOut();
     		break;
     	}
-    	case MEN_BACK: {
+    	case MENU_BACK: {
             finish();
             break;
     	}
-    	case MEN_CLEANUP: {
+    	case MENU_CLEANUP: {
             HardReference.cleanup();
             break;
     	}
@@ -346,10 +351,20 @@ public abstract class PdfViewerActivity extends Activity {
     
     private void zoomIn() {
     	if (mPdfFile != null) {
-    		if (mZoom < 4) {
-    			mZoom *= 1.5;
-    			if (mZoom > 4)
-    				mZoom = 4;
+    		if (mZoom < MAX_ZOOM) {
+    			mZoom *= ZOOM_INCREMENT;
+    			if (mZoom > MAX_ZOOM)
+    				mZoom = MAX_ZOOM;
+    			
+    			if (mZoom >= MAX_ZOOM) {
+    				Log.d(TAG, "Disabling zoom in button");
+    				mGraphView.bZoomIn.setEnabled(false);
+    			}
+    			else
+    				mGraphView.bZoomIn.setEnabled(true);
+    			
+				mGraphView.bZoomOut.setEnabled(true);
+				
     			//progress = ProgressDialog.show(PdfViewerActivity.this, "Rendering", "Rendering PDF Page");
     			startRenderThread(mPage, mZoom);
     		}
@@ -358,10 +373,20 @@ public abstract class PdfViewerActivity extends Activity {
 
     private void zoomOut() {
     	if (mPdfFile != null) {
-    		if (mZoom > 0.25) {
-    			mZoom /= 1.5;
-    			if (mZoom < 0.25)
-    				mZoom = 0.25f;
+    		if (mZoom > MIN_ZOOM) {
+    			mZoom /= ZOOM_INCREMENT;
+    			if (mZoom < MIN_ZOOM)
+    				mZoom = MIN_ZOOM;
+
+    			if (mZoom <= MIN_ZOOM) {
+    				Log.d(TAG, "Disabling zoom out button");
+    				mGraphView.bZoomOut.setEnabled(false);
+    			}
+    			else
+    				mGraphView.bZoomOut.setEnabled(true);
+
+    			mGraphView.bZoomIn.setEnabled(true);
+    			
     			//progress = ProgressDialog.show(PdfViewerActivity.this, "Rendering", "Rendering PDF Page");
     			startRenderThread(mPage, mZoom);
     		}
@@ -372,7 +397,9 @@ public abstract class PdfViewerActivity extends Activity {
     	if (mPdfFile != null) {
     		if (mPage < mPdfFile.getNumPages()) {
     			mPage += 1;
-    			progress = ProgressDialog.show(PdfViewerActivity.this, "Loading", "Loading PDF Page");
+    			mGraphView.bZoomOut.setEnabled(true);
+    			mGraphView.bZoomIn.setEnabled(true);
+    			progress = ProgressDialog.show(PdfViewerActivity.this, "Loading", "Loading PDF Page " + mPage, true, true);
     			startRenderThread(mPage, mZoom);
     		}
     	}
@@ -382,7 +409,9 @@ public abstract class PdfViewerActivity extends Activity {
     	if (mPdfFile != null) {
     		if (mPage > 1) {
     			mPage -= 1;
-    			progress = ProgressDialog.show(PdfViewerActivity.this, "Loading", "Loading PDF Page");
+    			mGraphView.bZoomOut.setEnabled(true);
+    			mGraphView.bZoomIn.setEnabled(true);
+    			progress = ProgressDialog.show(PdfViewerActivity.this, "Loading", "Loading PDF Page " + mPage, true, true);
     			startRenderThread(mPage, mZoom);
     		}
     	}
@@ -427,7 +456,9 @@ public abstract class PdfViewerActivity extends Activity {
 	            		catch (NumberFormatException ignore) {}
 	            		if ((pageNum!=mPage) && (pageNum>=1) && (pageNum <= mPdfFile.getNumPages())) {
 	            			mPage = pageNum;
-	            			progress = ProgressDialog.show(PdfViewerActivity.this, "Loading", "Loading PDF Page");
+	            			mGraphView.bZoomOut.setEnabled(true);
+	            			mGraphView.bZoomIn.setEnabled(true);
+	            			progress = ProgressDialog.show(PdfViewerActivity.this, "Loading", "Loading PDF Page " + mPage, true, true);
 	            			startRenderThread(mPage, mZoom);
 	            		}
 	                }
@@ -456,6 +487,9 @@ public abstract class PdfViewerActivity extends Activity {
     	//private TextView mLine3View; 
     	private Button mBtPage;
     	private Button mBtPage2;
+    	
+    	ImageButton bZoomOut;
+    	ImageButton bZoomIn;
         
         public GraphView(Context context) {
             super(context);
@@ -471,7 +505,7 @@ public abstract class PdfViewerActivity extends Activity {
 			vl.setOrientation(LinearLayout.VERTICAL);
 
 			if (mOldGraphView == null)
-				progress = ProgressDialog.show(PdfViewerActivity.this, "Loading", "Loading PDF Page");
+				progress = ProgressDialog.show(PdfViewerActivity.this, "Loading", "Loading PDF Page", true, true);
 			
 			addNavButtons(vl);
 		        // remember page button for updates
@@ -554,7 +588,7 @@ public abstract class PdfViewerActivity extends Activity {
 			hl.setOrientation(LinearLayout.HORIZONTAL);
 
 				// zoom out button
-				ImageButton bZoomOut=new ImageButton(context);
+				bZoomOut=new ImageButton(context);
 				bZoomOut.setBackgroundDrawable(null);
 				bZoomOut.setLayoutParams(lpChild1);
 				//bZoomOut.setText("-");
@@ -568,7 +602,7 @@ public abstract class PdfViewerActivity extends Activity {
 		        hl.addView(bZoomOut);
 		        
 				// zoom in button
-		        ImageButton bZoomIn=new ImageButton(context);
+		        bZoomIn=new ImageButton(context);
 		        bZoomIn.setBackgroundDrawable(null);
 				bZoomIn.setLayoutParams(lpChild1);
 		        //bZoomIn.setText("+");
