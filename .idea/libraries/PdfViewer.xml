@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="PdfViewer">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/PdfViewer.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
