@@ -25,4 +25,4 @@
         android:fromAlpha="0.0"
         android:toAlpha="1.0" />
 </set>
-<!-- From: file:/Users/winney/git/Android-Pdf-Viewer-Library1/PdfView/src/main/res/anim/slide_in.xml --><!-- From: file:/Users/winney/git/Android-Pdf-Viewer-Library1/PdfView/build/intermediates/bundles/debug/res/anim/slide_in.xml -->
+<!-- From: file:/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/src/main/res/anim/slide_in.xml --><!-- From: file:/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/build/intermediates/bundles/debug/res/anim/slide_in.xml -->

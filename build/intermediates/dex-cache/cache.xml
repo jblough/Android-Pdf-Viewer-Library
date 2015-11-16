@@ -2,38 +2,10 @@
 <items version="2" >
 
     <item
-        jar="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars/libs/internal_impl-23.1.1.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="a4de9c81ae239414e1ed0f86441b02abaf29bca9">
-        <dex dex="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/pre-dexed/debug/internal_impl-23.1.1-126a324723523ec1f7a4b9c3210130dc07f3ce24.jar" />
-    </item>
-    <item
-        jar="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="6cbc7773921fcfedbe55657578f0cbfe614778dc">
-        <dex dex="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/pre-dexed/debug/classes-bff1751713d25c3756ebe403749f107304713ac9.jar" />
-    </item>
-    <item
-        jar="/Users/winney/Documents/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/23.1.1/support-annotations-23.1.1.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="8d680ba5a623724d1fb0e81c36a790f023a6cede">
-        <dex dex="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/pre-dexed/debug/support-annotations-23.1.1-85fa4bca99e2191f84154194f8eef8c6c38e8718.jar" />
-    </item>
-    <item
-        jar="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
-        <dex dex="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/pre-dexed/debug/classes-48cc7c29280eddcfb9cdec7a75e0edbade6ba47b.jar" />
-    </item>
-    <item
         jar="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/exploded-aar/Android-Pdf-Viewer-Library/PdfView/unspecified/jars/classes.jar"
         jumboMode="false"
         revision="23.0.2"
-        sha1="230a2844949f9aedc6e5248649d35c48acf60d5e">
+        sha1="37191b3bdc528f4e4708f4a7e380629a951b272d">
         <dex dex="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/pre-dexed/debug/classes-dbc371ee905b36ce5cd278976d41c35b063e55b0.jar" />
     </item>
 
