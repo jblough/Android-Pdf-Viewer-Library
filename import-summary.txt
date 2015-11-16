@@ -1,0 +1,69 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* .idea/
+* .idea/.name
+* .idea/compiler.xml
+* .idea/copyright/
+* .idea/copyright/profiles_settings.xml
+* .idea/libraries/
+* .idea/libraries/PdfViewer.xml
+* .idea/misc.xml
+* .idea/modules.xml
+* .idea/vcs.xml
+* .idea/workspace.xml
+* Android-Pdf-Viewer-Library.iml
+* PdfViewer.jar
+* README.txt
+* build.xml
+* default.properties
+* proguard.cfg
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => app/src/main/AndroidManifest.xml
+* crypto-src/ => app/src/main/java/
+* res/ => app/src/main/res/
+* src/ => app/src/main/java/
+* src/com/sun/pdfview/.cvsignore => app/src/main/resources/com/sun/pdfview/.cvsignore
+* src/com/sun/pdfview/decode/CCITTCodes => app/src/main/resources/com/sun/pdfview/decode/CCITTCodes
+* src/com/sun/pdfview/font/res/BaseFonts.properties => app/src/main/resources/com/sun/pdfview/font/res/BaseFonts.properties
+* src/com/sun/pdfview/font/res/d050000l.pfb => app/src/main/resources/com/sun/pdfview/font/res/d050000l.pfb
+* src/com/sun/pdfview/font/res/n019003l.pfb => app/src/main/resources/com/sun/pdfview/font/res/n019003l.pfb
+* src/com/sun/pdfview/font/res/n019004l.pfb => app/src/main/resources/com/sun/pdfview/font/res/n019004l.pfb
+* src/com/sun/pdfview/font/res/n019023l.pfb => app/src/main/resources/com/sun/pdfview/font/res/n019023l.pfb
+* src/com/sun/pdfview/font/res/n019024l.pfb => app/src/main/resources/com/sun/pdfview/font/res/n019024l.pfb
+* src/com/sun/pdfview/font/res/n021003l.pfb => app/src/main/resources/com/sun/pdfview/font/res/n021003l.pfb
+* src/com/sun/pdfview/font/res/n021004l.pfb => app/src/main/resources/com/sun/pdfview/font/res/n021004l.pfb
+* src/com/sun/pdfview/font/res/n021023l.pfb => app/src/main/resources/com/sun/pdfview/font/res/n021023l.pfb
+* src/com/sun/pdfview/font/res/n021024l.pfb => app/src/main/resources/com/sun/pdfview/font/res/n021024l.pfb
+* src/com/sun/pdfview/font/res/n022003l.pfb => app/src/main/resources/com/sun/pdfview/font/res/n022003l.pfb
+* src/com/sun/pdfview/font/res/n022004l.pfb => app/src/main/resources/com/sun/pdfview/font/res/n022004l.pfb
+* src/com/sun/pdfview/font/res/n022023l.pfb => app/src/main/resources/com/sun/pdfview/font/res/n022023l.pfb
+* src/com/sun/pdfview/font/res/n022024l.pfb => app/src/main/resources/com/sun/pdfview/font/res/n022024l.pfb
+* src/com/sun/pdfview/font/res/s050000l.pfb => app/src/main/resources/com/sun/pdfview/font/res/s050000l.pfb
+* src/com/sun/pdfview/font/ttf/resource/glyphlist.txt => app/src/main/resources/com/sun/pdfview/font/ttf/resource/glyphlist.txt
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)

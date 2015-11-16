@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content"
+
+    android:paddingLeft="10dip"
+    android:paddingTop="5dip"
+    android:paddingRight="10dip"
+    android:paddingBottom="4dip"
+    
+    android:background="#99000000" >
+    
+    <ImageButton android:id="@+id/zoom_out"
+        android:text="Zoom Out"
+        android:src="@drawable/zoom_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="10" />
+        
+    <ImageButton android:id="@+id/zoom_in"
+        android:text="Zoom In"
+        android:src="@drawable/zoom_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="10" />
+        
+    <TextView android:id="@+id/navigation_page_position_label"
+    	android:text="1/1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="60"
+        android:gravity="center"
+        android:layout_gravity="center" />
+        
+    <ImageButton android:id="@+id/navigation_previous"
+        android:text="Previous"
+        android:src="@drawable/left_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="10" />
+        
+    <ImageButton android:id="@+id/navigation_next"
+        android:text="Next"
+        android:src="@drawable/right_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="10" />
+
+</LinearLayout>
