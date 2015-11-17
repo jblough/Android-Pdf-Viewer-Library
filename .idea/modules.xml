@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Android-Pdf-Viewer-Library.iml" filepath="$PROJECT_DIR$/Android-Pdf-Viewer-Library.iml" />
       <module fileurl="file://$PROJECT_DIR$/PdfView/PdfView.iml" filepath="$PROJECT_DIR$/PdfView/PdfView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gestureimageview/gestureimageview.iml" filepath="$PROJECT_DIR$/gestureimageview/gestureimageview.iml" />
       <module fileurl="file://$PROJECT_DIR$/pdfviewsample/pdfviewsample.iml" filepath="$PROJECT_DIR$/pdfviewsample/pdfviewsample.iml" />
     </modules>
   </component>

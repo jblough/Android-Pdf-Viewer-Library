@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/Users/winney/git/Android-Pdf-Viewer-Library/gestureimageview/src/main/res"/><source path="/Users/winney/git/Android-Pdf-Viewer-Library/gestureimageview/build/generated/res/rs/release"/><source path="/Users/winney/git/Android-Pdf-Viewer-Library/gestureimageview/build/generated/res/resValues/release"/></dataSet><dataSet config="release"><source path="/Users/winney/git/Android-Pdf-Viewer-Library/gestureimageview/src/release/res"/></dataSet><mergedItems/></merger>

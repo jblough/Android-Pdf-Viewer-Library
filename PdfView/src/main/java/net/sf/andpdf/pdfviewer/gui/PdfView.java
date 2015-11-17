@@ -6,11 +6,14 @@ import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.polites.android.GestureImageView;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFImage;
 import com.sun.pdfview.PDFPage;
@@ -35,7 +38,7 @@ public class PdfView extends FullScrollView {
     private static final float ZOOM_INCREMENT = 1.5f;
 
     private Bitmap mBi;
-    private ImageView mImageView;
+    private GestureImageView mImageView;
     private Handler uiHandler;
     ImageButton bZoomOut;
     ImageButton bZoomIn;
@@ -59,11 +62,12 @@ public class PdfView extends FullScrollView {
         PDFPaint.s_doAntiAlias = true;
         uiHandler = new Handler();
         LayoutParams matchLp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        mImageView = new ImageView(context);
+        mImageView = new GestureImageView(context);
+
         setPageBitmap(null);
         updateImage();
         addView(mImageView, matchLp);
-        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         setBackgroundColor(Color.LTGRAY);
         setHorizontalScrollBarEnabled(true);
         setHorizontalFadingEdgeEnabled(true);
@@ -79,6 +83,21 @@ public class PdfView extends FullScrollView {
         this.mPdfFile = mPdfFile;
     }
 
+    private int getDeviceWidth() {
+        DisplayMetrics metric = new DisplayMetrics();
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(metric);
+        return metric.widthPixels; // 屏幕宽度（像素）
+
+    }
+
+    private int getDeviceHeight() {
+        DisplayMetrics metric = new DisplayMetrics();
+        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getMetrics(metric);
+        return metric.heightPixels; // 屏幕高度（像素）
+    }
+
     public void showPage(int page, float zoom) throws Exception {
         try {
             // free memory from previous page
@@ -90,6 +109,13 @@ public class PdfView extends FullScrollView {
             }
             float width = mPdfPage.getWidth();
             float height = mPdfPage.getHeight();
+            if (getLayoutParams().height == ViewGroup.LayoutParams.MATCH_PARENT) {
+                height *= getDeviceWidth() / width;
+            }
+            if (getLayoutParams().width == LayoutParams.MATCH_PARENT) {
+                width = getDeviceWidth();
+            }
+
             RectF clip = null;
             Bitmap bi = mPdfPage.getImage((int) (width * zoom), (int) (height * zoom), clip, true, true);
             setPageBitmap(bi);

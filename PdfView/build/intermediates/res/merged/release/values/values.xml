@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/src/main/res/values/color.xml -->
+    <eat-comment/>
+    <drawable name="black">#000000</drawable>
+    <drawable name="blue">#000000FF</drawable>
+    <drawable name="violet">#9370DB</drawable>
+    <drawable name="white">#FFFFFFFF</drawable>
+    <!-- From: file:/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="app_name">PdfViewer</string>
+    <string name="hello">Hello World, PdfViewerActivity!</string>
+</resources>
