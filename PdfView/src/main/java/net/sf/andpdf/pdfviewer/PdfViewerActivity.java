@@ -148,36 +148,11 @@ public abstract class PdfViewerActivity extends Activity {
         super.onCreate(savedInstanceState);
         pdffilename = getFileName();
         Log.i(TAG, "onCreate");
-        //progress = ProgressDialog.show(PdfViewerActivity.this, "Loading", "Loading PDF Page");
-        /*closeNavigationHandler = new Handler();
-        closeNavigationThread = new Thread(new Runnable() {
-
-        	public void run() {
-        		navigationPanel.startAnimation(AnimationUtils.loadAnimation(PdfViewerActivity.this,
-        				R.anim.slide_out));
-        		navigationPanel.setVisibility(View.GONE);
-        	}
-        });*/
-
-        /*if (navigationPanel == null) {
-          navigationPanel = ((ViewStub) findViewById(R.id.stub_navigation)).inflate();
-        	navigationPanel.setVisibility(View.GONE);
-        	ImageButton previous = (ImageButton)navigationPanel.findViewById(R.id.navigation_previous);
-        	previous.setBackgroundDrawable(null);
-        }*/
-
         uiHandler = new Handler();
         restoreInstance();
         if (mOldGraphView != null) {
             mGraphView = new GraphView(this);
-            //mGraphView.fileMillis = mOldGraphView.fileMillis;
             mGraphView.mBi = mOldGraphView.mBi;
-            //mGraphView.mLine1 = mOldGraphView.mLine1;
-            //mGraphView.mLine2 = mOldGraphView.mLine2;
-            //mGraphView.mLine3 = mOldGraphView.mLine3;
-            //mGraphView.mText = mOldGraphView.mText;
-            //mGraphView.pageParseMillis= mOldGraphView.pageParseMillis;
-            //mGraphView.pageRenderMillis= mOldGraphView.pageRenderMillis;
             mOldGraphView = null;
             mGraphView.mImageView.setImageBitmap(mGraphView.mBi);
             mGraphView.updateTexts();
@@ -243,25 +218,13 @@ public abstract class PdfViewerActivity extends Activity {
 
     private synchronized void startRenderThread(final int page, final float zoom) {
         if (backgroundThread != null) return;
-
         mGraphView.showText("reading page " + page + ", zoom:" + zoom);
         //progress = ProgressDialog.show(PdfViewerActivity.this, "Loading", "Loading PDF Page");
         backgroundThread = new Thread(new Runnable() {
             public void run() {
                 try {
                     if (mPdfFile != null) {
-                        //progress = ProgressDialog.show(PdfViewerActivity.this, "Loading", "Loading PDF Page");
-
-                        //			        	File f = new File("/sdcard/andpdf.trace");
-                        //			        	f.delete();
-                        //			        	Log.e(TAG, "DEBUG.START");
-                        //			        	Debug.startMethodTracing("andpdf");
                         showPage(page, zoom);
-                        //			        	Debug.stopMethodTracing();
-                        //			        	Log.e(TAG, "DEBUG.STOP");
-
-				        /*if (progress != null)
-                            progress.dismiss();*/
                     }
                 } catch (Exception e) {
                     Log.e(TAG, e.getMessage(), e);
@@ -515,8 +478,8 @@ public abstract class PdfViewerActivity extends Activity {
             mImageView.setLayoutParams(lpWrap1);
             mImageView.setPadding(5, 5, 5, 5);
             vl.addView(mImageView);
-		        /*mImageView = (ImageView) findViewById(R.id.pdf_image);
-		        if (mImageView == null) {
+                /*mImageView = (ImageView) findViewById(R.id.pdf_image);
+                if (mImageView == null) {
 		        	Log.i(TAG, "mImageView is null!!!!!!");
 		        }
 		        setPageBitmap(null);
