@@ -54,7 +54,9 @@ import com.sun.pdfview.font.PDFFont;
  */
 public class PDFParser extends BaseWatchable {
 
-    /** emit a file of DCT stream data. */
+    /**
+     * emit a file of DCT stream data.
+     */
     public final static String DEBUG_DCTDECODE_DATA = "debugdctdecode";
     static final boolean RELEASE = true;
     static final int PDF_CMDS_RANGE1_MIN = 1;
@@ -76,11 +78,13 @@ public class PDFParser extends BaseWatchable {
     private boolean resend = false;
     private Tok tok;
     private boolean catchexceptions;   // Indicates state of BX...EX
-    /** a weak reference to the page we render into.  For the page
+    /**
+     * a weak reference to the page we render into.  For the page
      * to remain available, some other code must retain a strong reference to it.
      */
     private WeakReference pageRef;
-    /** the actual command, for use within a singe iteration.  Note that
+    /**
+     * the actual command, for use within a singe iteration.  Note that
      * this must be released at the end of each iteration to assure the
      * page can be collected if not in use
      */
@@ -88,7 +92,7 @@ public class PDFParser extends BaseWatchable {
     // ---- result variables
     byte[] stream;
     HashMap<String, PDFObject> resources;
-//    public static int debuglevel = 4000;
+    //    public static int debuglevel = 4000;
 // TODO [FHe]: changed for debugging
     public static int debuglevel = -1;
 
@@ -121,7 +125,7 @@ public class PDFParser extends BaseWatchable {
      * on to a PDFParser.
      */
     public PDFParser(PDFPage cmds, byte[] stream,
-            HashMap<String, PDFObject> resources) {
+                     HashMap<String, PDFObject> resources) {
         super();
 
         this.pageRef = new WeakReference<PDFPage>(cmds);
@@ -137,43 +141,76 @@ public class PDFParser extends BaseWatchable {
     /////////////////////////////////////////////////////////////////
     //  B E G I N   R E A D E R   S E C T I O N
     /////////////////////////////////////////////////////////////////
+
     /**
      * a token from a PDF Stream
      */
     static class Tok {
 
-        /** begin bracket &lt; */
+        /**
+         * begin bracket &lt;
+         */
         public static final int BRKB = 11;
-        /** end bracket &gt; */
+        /**
+         * end bracket &gt;
+         */
         public static final int BRKE = 10;
-        /** begin array [ */
+        /**
+         * begin array [
+         */
         public static final int ARYB = 9;
-        /** end array ] */
+        /**
+         * end array ]
+         */
         public static final int ARYE = 8;
-        /** String (, readString looks for trailing ) */
+        /**
+         * String (, readString looks for trailing )
+         */
         public static final int STR = 7;
-        /** begin brace { */
+        /**
+         * begin brace {
+         */
         public static final int BRCB = 5;
-        /** end brace } */
+        /**
+         * end brace }
+         */
         public static final int BRCE = 4;
-        /** number */
+        /**
+         * number
+         */
         public static final int NUM = 3;
-        /** keyword */
+        /**
+         * keyword
+         */
         public static final int CMD = 2;
-        /** name (begins with /) */
+        /**
+         * name (begins with /)
+         */
         public static final int NAME = 1;
-        /** unknown token */
+        /**
+         * unknown token
+         */
         public static final int UNK = 0;
-        /** end of stream */
+        /**
+         * end of stream
+         */
         public static final int EOF = -1;
-        /** the string value of a STR, NAME, or CMD token */
+        /**
+         * the string value of a STR, NAME, or CMD token
+         */
         public String name;
-        /** the value of a NUM token */
+        /**
+         * the value of a NUM token
+         */
         public double value;
-        /** the type of the token */
+        /**
+         * the type of the token
+         */
         public int type;
 
-        /** a printable representation of the token */
+        /**
+         * a printable representation of the token
+         */
         @Override
         public String toString() {
             if (type == NUM) {
@@ -372,7 +409,7 @@ public class PDFParser extends BaseWatchable {
      * character, which has already been read, and end with a balanced ')'
      * character.  A '\' character starts an escape sequence of up
      * to three octal digits.</p>
-     *
+     * <p/>
      * <p>Parenthesis must be enclosed by a balanced set of parenthesis,
      * so a string may enclose balanced parenthesis.</p>
      *
@@ -384,7 +421,7 @@ public class PDFParser extends BaseWatchable {
         int parenLevel = 0;
         final StringBuffer sb = new StringBuffer();
 
-        for (int to = stream_.length; loc < to;) {
+        for (int to = stream_.length; loc < to; ) {
             int c = stream_[loc++];
             if (c == ')') {
                 if (parenLevel-- == 0) {
@@ -425,7 +462,7 @@ public class PDFParser extends BaseWatchable {
      * character, which has already been read, and end with a '>'
      * character.  Each byte in the array is made up of two hex characters,
      * the first being the high-order bit.
-     *
+     * <p/>
      * We translate the byte arrays into char arrays by combining two bytes
      * into a character, and then translate the character array into a string.
      * [JK FIXME this is probably a really bad idea!]
@@ -440,7 +477,7 @@ public class PDFParser extends BaseWatchable {
         char w = (char) 0;
 
         // read individual bytes and format into a character array
-        for (int to = stream_.length; (loc < to) && (stream_[loc] != '>');) {
+        for (int to = stream_.length; (loc < to) && (stream_[loc] != '>'); ) {
             final char c = (char) stream_[loc];
             byte b = (byte) 0;
 
@@ -478,6 +515,7 @@ public class PDFParser extends BaseWatchable {
     /////////////////////////////////////////////////////////////////
     //  B E G I N   P A R S E R   S E C T I O N
     /////////////////////////////////////////////////////////////////
+
     /**
      * Called to prepare for some iterations
      */
@@ -505,16 +543,16 @@ public class PDFParser extends BaseWatchable {
     /**
      * parse the stream.  commands are added to the PDFPage initialized
      * in the constructor as they are encountered.
-     * <p>
+     * <p/>
      * Page numbers in comments refer to the Adobe PDF specification.<br>
      * commands are listed in PDF spec 32000-1:2008 in Table A.1
      *
      * @return <ul><li>Watchable.RUNNING when there are commands to be processed
-     *             <li>Watchable.COMPLETED when the page is done and all
-     *                 the commands have been processed
-     *             <li>Watchable.STOPPED if the page we are rendering into is
-     *                 no longer available
-     *         </ul> 
+     * <li>Watchable.COMPLETED when the page is done and all
+     * the commands have been processed
+     * <li>Watchable.STOPPED if the page we are rendering into is
+     * no longer available
+     * </ul>
      */
     public int iterate() throws Exception {
         // make sure the page is still available, and create the reference
@@ -662,7 +700,7 @@ public class PDFParser extends BaseWatchable {
                         path = new Path();
                         break;
                     case 'f':
-                    // the fall-through is intended!
+                        // the fall-through is intended!
                     case 'F':
                         // fill the path (close/not close identical)
                         cmds.addPath(path, PDFShapeCmd.FILL | clip);
@@ -952,11 +990,11 @@ public class PDFParser extends BaseWatchable {
                         break;
                     case 'Q' + ('q' << 8):
                         processQCmd();
-                    	// 'q'-cmd
-	                    //   push the parser state
-	                    parserStates.push((ParserState) state.clone());
-	                    //   push graphics state
-	                    cmds.addPush();
+                        // 'q'-cmd
+                        //   push the parser state
+                        parserStates.push((ParserState) state.clone());
+                        //   push graphics state
+                        cmds.addPush();
                         break;
                     default:
                         if (catchexceptions) {
@@ -1025,6 +1063,7 @@ public class PDFParser extends BaseWatchable {
         path = null;
         cmds = null;
     }
+
     boolean errorwritten = false;
 
     public void dumpStreamToError() {
@@ -1068,10 +1107,12 @@ public class PDFParser extends BaseWatchable {
     /////////////////////////////////////////////////////////////////
     //  H E L P E R S
     /////////////////////////////////////////////////////////////////
+
     /**
      * get a property from a named dictionary in the resources of this
      * content stream.
-     * @param name the name of the property in the dictionary
+     *
+     * @param name   the name of the property in the dictionary
      * @param inDict the name of the dictionary in the resources
      * @return the value of the property in the dictionary
      */
@@ -1092,6 +1133,7 @@ public class PDFParser extends BaseWatchable {
      * Insert a PDF object into the command stream.  The object must
      * either be an Image or a Form, which is a set of PDF commands
      * in a stream.
+     *
      * @param obj the object to insert, an Image or a Form.
      */
     private void doXObject(PDFObject obj) throws IOException {
@@ -1111,8 +1153,9 @@ public class PDFParser extends BaseWatchable {
     /**
      * Parse image data into a Java BufferedImage and add the image
      * command to the page.
+     *
      * @param obj contains the image data, and a dictionary describing
-     * the width, height and color space of the image.
+     *            the width, height and color space of the image.
      */
     private void doImage(PDFObject obj) throws IOException {
         cmds.addImage(PDFImage.createImage(obj, resources));
@@ -1122,8 +1165,9 @@ public class PDFParser extends BaseWatchable {
      * Inject a stream of PDF commands onto the page.  Optimized to cache
      * a parsed stream of commands, so that each Form object only needs
      * to be parsed once.
+     *
      * @param obj a stream containing the PDF commands, a transformation
-     * matrix, bounding box, and resources.
+     *            matrix, bounding box, and resources.
      */
     private void doForm(PDFObject obj) throws IOException {
         // check to see if we've already parsed this sucker
@@ -1186,6 +1230,7 @@ public class PDFParser extends BaseWatchable {
 //
 //        return patternSpace.getPaint(pattern, components, resources);
 //    }
+
     /**
      * Parse the next object out of the PDF stream.  This could be a
      * Double, a String, a HashMap (dictionary), Object[] array, or
@@ -1198,13 +1243,13 @@ public class PDFParser extends BaseWatchable {
             case Tok.NUM:
                 return new Double(tok.value);
             case Tok.STR:
-            // the fall-through is intended!
+                // the fall-through is intended!
             case Tok.NAME:
                 return tok.name;
             case Tok.BRKB: {
                 final HashMap<String, PDFObject> hm = new HashMap<String, PDFObject>();
                 String name = null;
-                for (Object obj = null; (obj = parseObject()) != null;) {
+                for (Object obj = null; (obj = parseObject()) != null; ) {
                     if (name == null) {
                         name = (String) obj;
                     } else {
@@ -1220,7 +1265,7 @@ public class PDFParser extends BaseWatchable {
             case Tok.ARYB: {
                 // build an array
                 final ArrayList<Object> ary = new ArrayList<Object>();
-                for (Object obj = null; (obj = parseObject()) != null;) {
+                for (Object obj = null; (obj = parseObject()) != null; ) {
                     ary.add(obj);
                 }
                 if (tok.type != Tok.ARYE) {
@@ -1351,6 +1396,7 @@ public class PDFParser extends BaseWatchable {
 
     /**
      * add graphics state commands contained within a dictionary.
+     *
      * @param name the resource name of the graphics state dictionary
      */
     private void setGSState(String name) throws IOException {
@@ -1408,11 +1454,15 @@ public class PDFParser extends BaseWatchable {
 
     /**
      * pop a single float value off the stack.
+     *
      * @return the float value of the top of the stack
      * @throws PDFParseException if the value on the top of the stack
-     * isn't a number
+     *                           isn't a number
      */
     private float popFloat() throws PDFParseException {
+        if (stack.isEmpty()) {
+            return 0;
+        }
         Object obj = stack.pop();
         if (obj instanceof Double) {
             return ((Double) obj).floatValue();
@@ -1425,10 +1475,11 @@ public class PDFParser extends BaseWatchable {
      * pop an array of float values off the stack.  This is equivalent
      * to filling an array from end to front by popping values off the
      * stack.
+     *
      * @param count the number of numbers to pop off the stack
      * @return an array of length <tt>count</tt>
      * @throws PDFParseException if any of the values popped off the
-     * stack are not numbers.
+     *                           stack are not numbers.
      */
     private float[] popFloat(int count) throws PDFParseException {
         float[] ary = new float[count];
@@ -1440,6 +1491,7 @@ public class PDFParser extends BaseWatchable {
 
     /**
      * pop a single integer value off the stack.
+     *
      * @return the integer value of the top of the stack
      * @throws PDFParseException if the top of the stack isn't a number.
      */
@@ -1456,10 +1508,11 @@ public class PDFParser extends BaseWatchable {
      * pop an array of integer values off the stack.  This is equivalent
      * to filling an array from end to front by popping values off the
      * stack.
+     *
      * @param count the number of numbers to pop off the stack
      * @return an array of length <tt>count</tt>
      * @throws PDFParseException if any of the values popped off the
-     * stack are not numbers.
+     *                           stack are not numbers.
      */
     private float[] popFloatArray() throws PDFParseException {
         Object obj = stack.pop();
@@ -1480,9 +1533,10 @@ public class PDFParser extends BaseWatchable {
 
     /**
      * pop a String off the stack.
+     *
      * @return the String from the top of the stack
      * @throws PDFParseException if the top of the stack is not a NAME
-     * or STR.
+     *                           or STR.
      */
     private String popString() throws PDFParseException {
         Object obj = stack.pop();
@@ -1495,9 +1549,10 @@ public class PDFParser extends BaseWatchable {
 
     /**
      * pop a PDFObject off the stack.
+     *
      * @return the PDFObject from the top of the stack
      * @throws PDFParseException if the top of the stack does not contain
-     * a PDFObject.
+     *                           a PDFObject.
      */
     private PDFObject popObject() throws PDFParseException {
         Object obj = stack.pop();
@@ -1509,9 +1564,10 @@ public class PDFParser extends BaseWatchable {
 
     /**
      * pop an array off the stack
+     *
      * @return the array of objects that is the top element of the stack
      * @throws PDFParseException if the top element of the stack does not
-     * contain an array.
+     *                           contain an array.
      */
     private Object[] popArray() throws PDFParseException {
         Object obj = stack.pop();
@@ -1528,11 +1584,17 @@ public class PDFParser extends BaseWatchable {
      */
     class ParserState implements Cloneable {
 
-        /** the fill color space */
+        /**
+         * the fill color space
+         */
         PDFColorSpace fillCS;
-        /** the stroke color space */
+        /**
+         * the stroke color space
+         */
         PDFColorSpace strokeCS;
-        /** the text paramters */
+        /**
+         * the text paramters
+         */
         PDFTextFormat textFormat;
 
         /**

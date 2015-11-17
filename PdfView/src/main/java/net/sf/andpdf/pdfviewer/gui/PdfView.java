@@ -5,13 +5,16 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Handler;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.sun.pdfview.PDFFile;
+import com.sun.pdfview.PDFImage;
 import com.sun.pdfview.PDFPage;
+import com.sun.pdfview.PDFPaint;
 import com.sun.pdfview.decrypt.PDFAuthenticationFailureException;
 import com.sun.pdfview.decrypt.PDFPassword;
 
@@ -43,14 +46,23 @@ public class PdfView extends FullScrollView {
     private float mZoom;
 
     public PdfView(Context context) {
-        super(context);
+        this(context, null);
+    }
+
+    public PdfView(Context context, AttributeSet attrs) {
+        this(context, attrs, android.R.attr.scrollViewStyle);
+    }
+
+    public PdfView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        PDFImage.sShowImages = true;
+        PDFPaint.s_doAntiAlias = true;
         uiHandler = new Handler();
-        LayoutParams matchLp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        LayoutParams matchLp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         mImageView = new ImageView(context);
         setPageBitmap(null);
         updateImage();
-        mImageView.setLayoutParams(matchLp);
-        addView(mImageView);
+        addView(mImageView, matchLp);
         setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         setBackgroundColor(Color.LTGRAY);
         setHorizontalScrollBarEnabled(true);
@@ -170,7 +182,7 @@ public class PdfView extends FullScrollView {
         }
     }
 
-    private synchronized void startRenderThread(final int page, final float zoom) {
+    public synchronized void startRenderThread(final int page, final float zoom) {
         if (backgroundThread != null) return;
         backgroundThread = new Thread(new Runnable() {
             public void run() {
@@ -199,7 +211,25 @@ public class PdfView extends FullScrollView {
         }, 1000);
     }
 
-    private void parsePDF(String filename, String password) throws PDFAuthenticationFailureException {
+    public void parsePDF(File f, String password) throws PDFAuthenticationFailureException {
+        try {
+            long len = f.length();
+            if (len == 0) {
+                toastMessage("file '" + f.getName() + "' not found");
+            } else {
+                toastMessage("file '" + f.getName() + "' has " + len + " bytes");
+                openFile(f, password);
+            }
+        } catch (PDFAuthenticationFailureException e) {
+            throw e;
+        } catch (Throwable e) {
+            e.printStackTrace();
+            toastMessage("Exception: " + e.getMessage());
+        }
+    }
+
+
+    public void parsePDF(String filename, String password) throws PDFAuthenticationFailureException {
         try {
             File f = new File(filename);
             long len = f.length();

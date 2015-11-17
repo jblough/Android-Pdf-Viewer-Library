@@ -38,6 +38,11 @@ import com.sun.pdfview.decrypt.PDFAuthenticationFailureException;
 import com.sun.pdfview.decrypt.PDFPassword;
 import com.sun.pdfview.font.PDFFont;
 
+import net.sf.andpdf.nio.ByteBuffer;
+import net.sf.andpdf.pdfviewer.gui.FullScrollView;
+import net.sf.andpdf.pdfviewer.gui.PdfView;
+import net.sf.andpdf.refs.HardReference;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,11 +50,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
-
-import net.sf.andpdf.nio.ByteBuffer;
-import net.sf.andpdf.pdfviewer.gui.FullScrollView;
-import net.sf.andpdf.pdfviewer.gui.PdfView;
-import net.sf.andpdf.refs.HardReference;
 
 /**
  * U:\Android\android-sdk-windows-1.5_r1\tools\adb push u:\Android\simple_T.pdf /data/test.pdf
@@ -117,7 +117,7 @@ public abstract class PdfViewerActivity extends Activity {
      * restore member variables from previously saved instance
      *
      * @return true if instance to restore from was found
-     * @see onRetainNonConfigurationInstance
+     * @see
      */
     private boolean restoreInstance() {
         mOldGraphView = null;
@@ -156,7 +156,7 @@ public abstract class PdfViewerActivity extends Activity {
             mGraphView.mBi = mOldGraphView.mBi;
             mOldGraphView = null;
             mGraphView.mImageView.setImageBitmap(mGraphView.mBi);
-            mGraphView.updateTexts();
+//            mGraphView.updateTexts();
             setContentView(mGraphView);
         } else {
             mGraphView = new GraphView(this);
@@ -220,7 +220,7 @@ public abstract class PdfViewerActivity extends Activity {
 
     private synchronized void startRenderThread(final int page, final float zoom) {
         if (backgroundThread != null) return;
-        mGraphView.showText("reading page " + page + ", zoom:" + zoom);
+//        mGraphView.showText("reading page " + page + ", zoom:" + zoom);
         //progress = ProgressDialog.show(PdfViewerActivity.this, "Loading", "Loading PDF Page");
         backgroundThread = new Thread(new Runnable() {
             public void run() {
@@ -241,13 +241,13 @@ public abstract class PdfViewerActivity extends Activity {
     private void updateImageStatus() {
         //		Log.i(TAG, "updateImageStatus: " +  (System.currentTimeMillis()&0xffff));
         if (backgroundThread == null) {
-            mGraphView.updateUi();
+//            mGraphView.updateUi();
 
 			/*if (progress != null)
                 progress.dismiss();*/
             return;
         }
-        mGraphView.updateUi();
+//        mGraphView.updateUi();
         mGraphView.postDelayed(new Runnable() {
             public void run() {
                 updateImageStatus();
@@ -464,7 +464,7 @@ public abstract class PdfViewerActivity extends Activity {
             LinearLayout.LayoutParams lpWrap10 =
                     new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
-
+            LayoutParams matchLp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             // vertical layout
             LinearLayout vl = new LinearLayout(context);
             vl.setLayoutParams(lpWrap10);
@@ -485,10 +485,11 @@ public abstract class PdfViewerActivity extends Activity {
             updateImage();
             mImageView.setLayoutParams(lpWrap1);
 //            mImageView.setPadding(5, 5, 5, 5);
-            vl.addView(mImageView);
+            //vl.addView(mImageView);
             //TODO
-            vl.addView(pdfView);
-            pdfView.setLayoutParams(lpWrap1);
+//            vl.addView(pdfView);
+            addView(pdfView);
+            pdfView.setLayoutParams(matchLp);
 
                 /*mImageView = (ImageView) findViewById(R.id.pdf_image);
                 if (mImageView == null) {
@@ -545,7 +546,7 @@ public abstract class PdfViewerActivity extends Activity {
             setHorizontalFadingEdgeEnabled(true);
             setVerticalScrollBarEnabled(true);
             setVerticalFadingEdgeEnabled(true);
-            addView(vl);
+//            addView(vl);
         }
 
         private void addNavButtons(ViewGroup vg) {
@@ -662,19 +663,14 @@ public abstract class PdfViewerActivity extends Activity {
             vg.addView(tvSpacer);
         }
 
-        private void showText(String text) {
-            Log.i(TAG, "ST='" + text + "'");
-            //mText = text;
-            updateUi();
-        }
 
-        private void updateUi() {
-            uiHandler.post(new Runnable() {
-                public void run() {
-                    updateTexts();
-                }
-            });
-        }
+//        private void updateUi() {
+//            uiHandler.post(new Runnable() {
+//                public void run() {
+//                    updateTexts();
+//                }
+//            });
+//        }
 
         private void updateImage() {
             uiHandler.post(new Runnable() {
@@ -707,15 +703,15 @@ public abstract class PdfViewerActivity extends Activity {
             }
         }
 
-        protected void updateTexts() {
-
-            if (mPdfPage != null) {
-                if (mBtPage != null)
-                    mBtPage.setText(mPdfPage.getPageNumber() + "/" + mPdfFile.getNumPages());
-                if (mBtPage2 != null)
-                    mBtPage2.setText(mPdfPage.getPageNumber() + "/" + mPdfFile.getNumPages());
-            }
-        }
+//        protected void updateTexts() {
+//
+//            if (mPdfPage != null) {
+//                if (mBtPage != null)
+//                    mBtPage.setText(mPdfPage.getPageNumber() + "/" + mPdfFile.getNumPages());
+//                if (mBtPage2 != null)
+//                    mBtPage2.setText(mPdfPage.getPageNumber() + "/" + mPdfFile.getNumPages());
+//            }
+//        }
     }
 
     private void showPage(int page, float zoom) throws Exception {
@@ -747,7 +743,7 @@ public abstract class PdfViewerActivity extends Activity {
             if (progress != null) progress.dismiss();
         } catch (Throwable e) {
             Log.e(TAG, e.getMessage(), e);
-            mGraphView.showText("Exception: " + e.getMessage());
+//            mGraphView.showText("Exception: " + e.getMessage());
         }
         //long stopTime = System.currentTimeMillis();
         //mGraphView.pageParseMillis = middleTime-startTime;
@@ -760,16 +756,16 @@ public abstract class PdfViewerActivity extends Activity {
             File f = new File(filename);
             long len = f.length();
             if (len == 0) {
-                mGraphView.showText("file '" + filename + "' not found");
+//                mGraphView.showText("file '" + filename + "' not found");
             } else {
-                mGraphView.showText("file '" + filename + "' has " + len + " bytes");
+//                mGraphView.showText("file '" + filename + "' has " + len + " bytes");
                 openFile(f, password);
             }
         } catch (PDFAuthenticationFailureException e) {
             throw e;
         } catch (Throwable e) {
             e.printStackTrace();
-            mGraphView.showText("Exception: " + e.getMessage());
+//            mGraphView.showText("Exception: " + e.getMessage());
         }
         //long stopTime = System.currentTimeMillis();
         //mGraphView.fileMillis = stopTime-startTime;
@@ -800,7 +796,7 @@ public abstract class PdfViewerActivity extends Activity {
         } else {
             mPdfFile = new PDFFile(bb, new PDFPassword(password));
         }
-        mGraphView.showText("Anzahl Seiten:" + mPdfFile.getNumPages());
+//        mGraphView.showText("Anzahl Seiten:" + mPdfFile.getNumPages());
     }
     
      
