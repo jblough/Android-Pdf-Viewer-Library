@@ -2,11 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/exploded-aar/Android-Pdf-Viewer-Library/PdfView/unspecified/jars/classes.jar"
+        jar="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/exploded-aar/Android-Pdf-Viewer-Library/gestureimageview/unspecified/jars/classes.jar"
         jumboMode="false"
         revision="23.0.2"
-        sha1="e7d6dd07e1cac71ea7611e16c5dcd8b3cba978dc">
-        <dex dex="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/pre-dexed/debug/classes-dbc371ee905b36ce5cd278976d41c35b063e55b0.jar" />
+        sha1="2f2ce378a301d9d7e7e28471e3b2ca00a2a7a295">
+        <dex dex="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/pre-dexed/debug/classes-2d8e925b68621d359f738ab3f7d7c4efa44a8520.jar" />
     </item>
 
 </items>
