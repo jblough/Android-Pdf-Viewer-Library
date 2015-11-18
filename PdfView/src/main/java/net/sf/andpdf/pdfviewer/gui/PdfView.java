@@ -8,25 +8,25 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ImageButton;
 import android.widget.Toast;
-
+import com.polites.android.Direction;
 import com.polites.android.GestureImageView;
+import com.polites.android.GestureImageViewTouchListener;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFImage;
 import com.sun.pdfview.PDFPage;
 import com.sun.pdfview.PDFPaint;
 import com.sun.pdfview.decrypt.PDFAuthenticationFailureException;
 import com.sun.pdfview.decrypt.PDFPassword;
-
-import net.sf.andpdf.nio.ByteBuffer;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
+import net.sf.andpdf.nio.ByteBuffer;
+import net.sf.andpdf.refs.HardReference;
 
 public class PdfView extends FullScrollView {
 
@@ -40,13 +40,13 @@ public class PdfView extends FullScrollView {
   private Bitmap mBi;
   public GestureImageView mImageView;
   private Handler uiHandler;
-  ImageButton bZoomOut;
-  ImageButton bZoomIn;
   private PDFFile mPdfFile;
   private PDFPage mPdfPage;
   private Thread backgroundThread;
   private int mPage;
   private float mZoom;
+
+  private boolean drawing = false;
 
   public PdfView(Context context) {
     this(context, null);
@@ -60,6 +60,7 @@ public class PdfView extends FullScrollView {
     super(context, attrs, defStyle);
     PDFImage.sShowImages = true;
     PDFPaint.s_doAntiAlias = true;
+    HardReference.sKeepCaches = true;
     uiHandler = new Handler();
     LayoutParams matchLp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
     mImageView = new GestureImageView(context);
@@ -71,6 +72,31 @@ public class PdfView extends FullScrollView {
     setHorizontalFadingEdgeEnabled(true);
     setVerticalScrollBarEnabled(true);
     setVerticalFadingEdgeEnabled(true);
+    mZoom = STARTZOOM;
+    mImageView.setOnClickListener(new OnClickListener() {
+      @Override public void onClick(View v) {
+        nextPage();
+      }
+    });
+    mImageView.setOnReachBoundListener(new GestureImageViewTouchListener.OnReachBoundListener() {
+      @Override public void onReach(View view, int direction) {
+        if (drawing) {
+          return;
+        }
+        switch (direction) {
+          case Direction.LEFT:
+            prevPage();
+            break;
+          case Direction.RIGHT:
+            nextPage();
+            break;
+          case Direction.TOP:
+            break;
+          case Direction.BOTTOM:
+            break;
+        }
+      }
+    });
   }
 
   public PDFFile getmPdfFile() {
@@ -111,9 +137,8 @@ public class PdfView extends FullScrollView {
       if (getLayoutParams().width == LayoutParams.MATCH_PARENT) {
         width = getDeviceWidth();
       }
-
       RectF clip = null;
-      Bitmap bi = mPdfPage.getImage((int) (width * zoom), (int) (height * zoom), clip, true, true);
+      final Bitmap bi = mPdfPage.getImage((int) (width * zoom), (int) (height * zoom), clip, true, true);
       setPageBitmap(bi);
       updateImage();
     } catch (Throwable e) {
@@ -124,6 +149,7 @@ public class PdfView extends FullScrollView {
   private void updateImage() {
     uiHandler.post(new Runnable() {
       public void run() {
+        mImageView.reset();
         mImageView.setImageBitmap(mBi);
       }
     });
@@ -140,15 +166,6 @@ public class PdfView extends FullScrollView {
       if (mZoom < MAX_ZOOM) {
         mZoom *= ZOOM_INCREMENT;
         if (mZoom > MAX_ZOOM) mZoom = MAX_ZOOM;
-
-        if (mZoom >= MAX_ZOOM) {
-          Log.d(TAG, "Disabling zoom in button");
-          bZoomIn.setEnabled(false);
-        } else {
-          bZoomIn.setEnabled(true);
-        }
-
-        bZoomOut.setEnabled(true);
         startRenderThread(mPage, mZoom);
       }
     }
@@ -159,15 +176,6 @@ public class PdfView extends FullScrollView {
       if (mZoom > MIN_ZOOM) {
         mZoom /= ZOOM_INCREMENT;
         if (mZoom < MIN_ZOOM) mZoom = MIN_ZOOM;
-
-        if (mZoom <= MIN_ZOOM) {
-          Log.d(TAG, "Disabling zoom out button");
-          bZoomOut.setEnabled(false);
-        } else {
-          bZoomOut.setEnabled(true);
-        }
-
-        bZoomIn.setEnabled(true);
         startRenderThread(mPage, mZoom);
       }
     }
@@ -177,8 +185,6 @@ public class PdfView extends FullScrollView {
     if (mPdfFile != null) {
       if (mPage < mPdfFile.getNumPages()) {
         mPage += 1;
-        bZoomOut.setEnabled(true);
-        bZoomIn.setEnabled(true);
         startRenderThread(mPage, mZoom);
       }
     }
@@ -188,8 +194,6 @@ public class PdfView extends FullScrollView {
     if (mPdfFile != null) {
       if (mPage > 1) {
         mPage -= 1;
-        bZoomOut.setEnabled(true);
-        bZoomIn.setEnabled(true);
         startRenderThread(mPage, mZoom);
       }
     }
@@ -205,6 +209,7 @@ public class PdfView extends FullScrollView {
     if (backgroundThread != null) return;
     backgroundThread = new Thread(new Runnable() {
       public void run() {
+        drawing = true;
         try {
           if (mPdfFile != null) {
             showPage(page, zoom);
@@ -212,6 +217,7 @@ public class PdfView extends FullScrollView {
         } catch (Exception e) {
           Log.e(TAG, e.getMessage(), e);
         }
+        drawing = false;
         backgroundThread = null;
       }
     });

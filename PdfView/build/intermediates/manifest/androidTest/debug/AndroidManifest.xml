@@ -3,7 +3,7 @@
     package="net.sf.andpdf.pdfviewer.test" >
 
     <uses-sdk
-        android:minSdkVersion="4"
+        android:minSdkVersion="14"
         android:targetSdkVersion="4" />
 
     <instrumentation
