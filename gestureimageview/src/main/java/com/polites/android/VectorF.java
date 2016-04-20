@@ -16,7 +16,6 @@
 package com.polites.android;
 
 import android.graphics.PointF;
-import android.util.FloatMath;
 import android.view.MotionEvent;
 
 public class VectorF {
@@ -28,8 +27,8 @@ public class VectorF {
 	public final PointF end = new PointF();
 	
 	public void calculateEndPoint() {
-		end.x = FloatMath.cos(angle) * length + start.x;
-		end.y = FloatMath.sin(angle) * length + start.y;
+		end.x = (float) (Math.cos(angle) * length + start.x);
+		end.y = (float) (Math.sin(angle) * length + start.y);
 	}
 	
 	public void setStart(PointF p) {

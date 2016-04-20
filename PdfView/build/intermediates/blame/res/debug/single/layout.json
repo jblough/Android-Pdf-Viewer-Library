@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/build/intermediates/res/merged/debug/layout/scroll_layout.xml",
+        "source": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/src/main/res/layout/scroll_layout.xml"
+    },
+    {
+        "merged": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/build/intermediates/res/merged/debug/layout/dialog_pagenumber.xml",
+        "source": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/src/main/res/layout/dialog_pagenumber.xml"
+    },
+    {
+        "merged": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/build/intermediates/res/merged/debug/layout/pdf_file_password.xml",
+        "source": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/src/main/res/layout/pdf_file_password.xml"
+    },
+    {
+        "merged": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/build/intermediates/res/merged/debug/layout/navigation_overlay.xml",
+        "source": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/src/main/res/layout/navigation_overlay.xml"
+    },
+    {
+        "merged": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/build/intermediates/res/merged/debug/layout/main.xml",
+        "source": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/src/main/res/layout/main.xml"
+    },
+    {
+        "merged": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/build/intermediates/res/merged/debug/layout/graphics_view.xml",
+        "source": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/src/main/res/layout/graphics_view.xml"
+    }
+]

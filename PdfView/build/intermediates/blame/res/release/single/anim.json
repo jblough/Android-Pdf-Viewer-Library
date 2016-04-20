@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/build/intermediates/res/merged/release/anim/slide_in.xml",
+        "source": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/src/main/res/anim/slide_in.xml"
+    },
+    {
+        "merged": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/build/intermediates/res/merged/release/anim/slide_out.xml",
+        "source": "/Users/winney/git/Android-Pdf-Viewer-Library/PdfView/src/main/res/anim/slide_out.xml"
+    }
+]

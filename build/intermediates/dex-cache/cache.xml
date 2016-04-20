@@ -1,12 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" >
-
-    <item
-        jar="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/exploded-aar/Android-Pdf-Viewer-Library/gestureimageview/unspecified/jars/classes.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="061dda9d6d719f1df4a3ff424cbedaecb6d4e6ce">
-        <dex dex="/Users/winney/git/Android-Pdf-Viewer-Library/pdfviewsample/build/intermediates/pre-dexed/debug/classes-2d8e925b68621d359f738ab3f7d7c4efa44a8520.jar" />
-    </item>
-
-</items>
+<items version="2" />

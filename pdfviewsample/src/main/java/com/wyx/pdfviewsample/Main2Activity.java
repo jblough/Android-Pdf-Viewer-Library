@@ -32,7 +32,7 @@ public class Main2Activity extends Activity {
   @Override protected void onStart() {
     super.onStart();
     try {
-      pdfView.parsePDF(FileUtils.fileFromAsset(this, "about.pdf"), null);
+      pdfView.parsePDF(FileUtils.fileFromAsset(this, "sample.pdf"), null);
     } catch (IOException e) {
       e.printStackTrace();
     }
