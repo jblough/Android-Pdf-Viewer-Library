@@ -48,8 +48,8 @@
       <file leaf-file-name="PDFImage.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/PdfView/src/main/java/com/sun/pdfview/PDFImage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.30015796">
-              <caret line="162" column="50" selection-start-line="162" selection-start-column="50" selection-end-line="162" selection-end-column="50" />
+            <state vertical-scroll-proportion="0.27014217">
+              <caret line="161" column="0" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -3790,7 +3790,13 @@
       <option name="project" value="LOCAL" />
       <updated>1468659075181</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="delete useless">
+      <created>1468659102356</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1468659102356</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView">
@@ -4424,8 +4430,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/PdfView/src/main/java/com/sun/pdfview/PDFImage.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.30015796">
-          <caret line="162" column="50" selection-start-line="162" selection-start-column="50" selection-end-line="162" selection-end-column="50" />
+        <state vertical-scroll-proportion="0.27014217">
+          <caret line="161" column="0" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
           <folding />
         </state>
       </provider>
